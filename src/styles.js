@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 // + icon
 import { BsPlusCircle } from "react-icons/bs";
+// home
+// import { BiHome } from "react-icons/bi";
 
 export const GlobalStyle = createGlobalStyle`
   body {
@@ -24,6 +26,7 @@ export const FirstPageDiv = styled.div`
   height: 100vh;
   opacity: 70%;
   background-size: cover;
+  background-position: center;
   background-image: url(${camvid});
 `;
 
@@ -56,8 +59,9 @@ export const HeaderDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  position: relative;
+  position: relative; // Removed the extra
   padding: 10px;
+  z-index: 900;
 `;
 
 export const HeaderTitleDiv = styled.div`
@@ -135,12 +139,14 @@ export const NavbarButtons = styled.li`
   background: white;
   color: black;
   border: none;
+  border-radius: 3px;
   margin: 2px;
   outline: none;
   text-transform: capitalize;
   cursor: pointer;
+
   :hover {
-    background: gray;
+    background: none;
     transition: 0.4s;
     color: white;
   }
@@ -150,27 +156,45 @@ export const NavBarUL = styled.ul`
   list-style: none;
   display: flex;
   flex-flow: row nowrap;
-  /* transition: 0.7s; */
+  /* transition: 0.3s; */
 
   @media (max-width: 760px) {
     flex-flow: column nowrap;
     transform: ${({ open }) => (open ? `translateX(0%)` : `translateX(100%)`)};
     position: absolute;
-    height: 50vh;
+    min-height: 100vh;
     width: 175px;
     top: 59px;
     right: 0;
     background: black;
-    opacity: 70%;
 
     li {
       align-items: center;
-      margin-top: 20px;
+      margin-top: 30px;
       color: white;
       background: none;
       font-weight: bold;
-      :hover {
+      position: relative;
+      /* :hover {
+        color: #b0b0b0;
         background: none;
+        transition: 0.5s;
+      } */
+      :before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        bottom: 0;
+        left: 0;
+        background-color: white;
+        visibility: hidden;
+        transform: scaleX(0);
+        transition: all 0.3s ease-in-out;
+      }
+      :hover:before {
+        visibility: visible;
+        transform: scaleX(1);
       }
     }
   }
@@ -195,7 +219,7 @@ export const NameTagDiv = styled.div`
   margin-right: auto;
   margin-top: 10px;
 `;
-export const PriceAndNameTag = styled.text`
+export const PriceAndNameTag = styled.label`
   text-align: center;
   font-size: 20px;
   color: ${(props) => props.theme.fontColor};
@@ -396,11 +420,11 @@ export const UpdateButtonStyled = styled.button`
 `;
 
 export const DeleteButton = styled.button`
+  background-color: ${(props) => props.theme.deleteButton};
   text-align: center;
   font-family: sans-serif;
   font-size: 15px;
   color: white;
-  background-color: ${(props) => props.theme.deleteButton};
   /* border: 2px solid ${(props) => props.theme.moreInfoBorder}; */
   border: 2px solid white;
   outline: none;
@@ -474,7 +498,7 @@ export const StudentsInfoWrapperDiv = styled.div`
   /* gap: 10px; */
 `;
 
-export const StudentNameTag = styled.text`
+export const StudentNameTag = styled.label`
   text-align: center;
   font-size: 15px;
   color: ${(props) => props.theme.fontColor};

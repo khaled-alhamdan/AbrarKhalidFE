@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // Importing products store
 import studentStore from "../Stores/studentStore";
-import universityStore from "../Stores/universityStore";
+// import universityStore from "../Stores/universityStore";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react";
 
@@ -40,7 +40,13 @@ const StudentModal = ({ oldStudent, modalStatus, isOpen, closeModal }) => {
   const { universityId } = useParams();
 
   const handleChange = (event) => {
-    setStudent({ ...student, [event.target.name]: event.target.value });
+    setStudent({
+      ...student,
+      [event.target.name]:
+        event.target.name === "image"
+          ? event.target.files[0]
+          : event.target.value,
+    });
   };
 
   const handleSubmit = (event) => {
@@ -49,6 +55,7 @@ const StudentModal = ({ oldStudent, modalStatus, isOpen, closeModal }) => {
       student,
       universityId
     );
+    closeModal();
   };
 
   return (
@@ -80,10 +87,9 @@ const StudentModal = ({ oldStudent, modalStatus, isOpen, closeModal }) => {
                 <ModalLabels>Image :</ModalLabels>
                 <ModalInputDiv>
                   <ModalInput
-                    type="text"
+                    type="file"
                     placeholder="Enter University Image"
                     name="image"
-                    value={student.image}
                     onChange={handleChange}
                   />
                 </ModalInputDiv>
@@ -91,7 +97,7 @@ const StudentModal = ({ oldStudent, modalStatus, isOpen, closeModal }) => {
             </div>
             <CreateButtonStyled
               className="btn float-right"
-              onSubmit={{ handleSubmit }}
+              onSubmit={handleSubmit}
             >
               {oldStudent ? "Update" : "Create"}
             </CreateButtonStyled>

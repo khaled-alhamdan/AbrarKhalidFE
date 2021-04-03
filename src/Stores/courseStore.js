@@ -1,19 +1,21 @@
 import axios from "axios";
-import { makeObservable, observable, action } from "mobx";
+// import { makeObservable, observable, action } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class CourseStore {
   courses = [];
   loading = false;
 
   constructor() {
-    makeObservable(this, {
-      courses: observable,
-      loading: observable,
-      createCourse: action,
-      deleteCourse: action,
-      fetchCourses: action,
-      updateCourse: action,
-    });
+    // makeObservable(this, {
+    //   courses: observable,
+    //   loading: observable,
+    //   createCourse: action,
+    //   deleteCourse: action,
+    //   fetchCourses: action,
+    //   updateCourse: action,
+    // });
+    makeAutoObservable(this);
   }
 
   fetchCourses = async () => {

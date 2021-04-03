@@ -1,4 +1,3 @@
-import "./App.css";
 // Importing useState
 import { useState } from "react";
 // Importing Route and Switch
@@ -51,7 +50,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div style={{ width: "100vw", overflow: "hidden" }}>
       <ThemeProvider theme={theme[currentTheme]}>
         <HeaderNavbar />
         <GlobalStyle />

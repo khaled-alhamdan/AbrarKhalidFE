@@ -1,6 +1,7 @@
 import axios from "axios";
-import { makeObservable, observable, action } from "mobx";
-import studentStore from "./studentStore";
+// import { makeObservable, observable, action } from "mobx";
+import { makeAutoObservable } from "mobx";
+// import studentStore from "./studentStore";
 
 class UniversityStore {
   universities = [];
@@ -8,13 +9,7 @@ class UniversityStore {
   loading = true;
 
   constructor() {
-    makeObservable(this, {
-      universities: observable,
-      createUniversity: action,
-      deleteUniversity: action,
-      fetchUniversities: action,
-      updateUniversity: action,
-    });
+    makeAutoObservable(this);
   }
 
   fetchUniversities = async () => {
@@ -22,6 +17,7 @@ class UniversityStore {
       const response = await axios.get("http://localhost:8001/universities");
       this.universities = response.data;
       this.loading = false;
+      console.log(this.universities);
     } catch (error) {
       console.error(error);
     }
@@ -29,9 +25,11 @@ class UniversityStore {
 
   createUniversity = async (newUniversity) => {
     try {
+      const formData = new FormData();
+      for (const key in newUniversity) formData.append(key, newUniversity[key]);
       const res = await axios.post(
         "http://localhost:8001/universities",
-        newUniversity
+        formData
       );
       this.universities.push(res.data);
     } catch (error) {
@@ -41,14 +39,18 @@ class UniversityStore {
 
   updateUniversity = async (updateUniversity) => {
     try {
+      const formData = new FormData();
+      for (const key in updateUniversity)
+        formData.append(key, updateUniversity[key]);
       await axios.put(
         `http://localhost:8001/universities/${updateUniversity.id}`,
-        updateUniversity
+        formData
       );
       const university = this.universities.find(
         (university) => university.id === updateUniversity.id
       );
       for (const key in university) university[key] = updateUniversity[key];
+      university.image = URL.createObjectURL(updateUniversity.image);
     } catch (error) {
       console.log(error);
     }

@@ -28,6 +28,7 @@ export const UniversityDetail = (props) => {
       (university) => university.id === +universityId
     );
 
+  console.log(university);
   return (
     <div
       style={{
@@ -56,9 +57,6 @@ export const UniversityDetail = (props) => {
 
         <CoursesWrapper>
           <Accordion />
-          {/* <StudentsInfoConatinerDiv>
-            <StudentsInfoWrapperDiv>{students}</StudentsInfoWrapperDiv>
-          </StudentsInfoConatinerDiv> */}
         </CoursesWrapper>
 
         <div style={{ marginBottom: "15px" }}>

@@ -26,15 +26,21 @@ const customStyles = {
 const UniModal = ({ oldUniversity, modalStatus, isOpen, closeModal }) => {
   const [university, setUniversity] = useState(
     oldUniversity ?? {
-      name: "",
+      name: null,
       image: "",
       description: "",
-      country: "",
+      country: null,
     }
   );
 
   const handleChange = (event) => {
-    setUniversity({ ...university, [event.target.name]: event.target.value });
+    setUniversity({
+      ...university,
+      [event.target.name]:
+        event.target.name === "image"
+          ? event.target.files[0]
+          : event.target.value,
+    });
   };
 
   const handleSubmit = (event) => {
@@ -42,6 +48,7 @@ const UniModal = ({ oldUniversity, modalStatus, isOpen, closeModal }) => {
     universityStore[oldUniversity ? "updateUniversity" : "createUniversity"](
       university
     );
+    closeModal();
   };
 
   return (
@@ -76,7 +83,6 @@ const UniModal = ({ oldUniversity, modalStatus, isOpen, closeModal }) => {
                     type="file"
                     placeholder="Enter University Image"
                     name="image"
-                    value={university.image}
                     onChange={handleChange}
                   />
                 </ModalInputDiv>
@@ -108,7 +114,7 @@ const UniModal = ({ oldUniversity, modalStatus, isOpen, closeModal }) => {
             </div>
             <CreateButtonStyled
               className="btn float-right"
-              onSubmit={{ handleSubmit }}
+              onSubmit={handleSubmit}
             >
               {oldUniversity ? "Update" : "Create"}
             </CreateButtonStyled>

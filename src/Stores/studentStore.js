@@ -1,19 +1,13 @@
 import axios from "axios";
-import { makeObservable, observable, action } from "mobx";
+// import { makeObservable, observable, action } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class StudentStore {
   students = [];
   loading = true;
 
   constructor() {
-    makeObservable(this, {
-      students: observable,
-      loading: observable,
-      createStudent: action,
-      deleteStudent: action,
-      fetchStudents: action,
-      updateStudent: action,
-    });
+    makeAutoObservable(this);
   }
 
   fetchStudents = async () => {
@@ -40,14 +34,18 @@ class StudentStore {
 
   updateStudent = async (updateStudent) => {
     try {
+      const formData = new FormData();
+      for (const key in updateStudent) formData.append(key, updateStudent[key]);
       await axios.put(
         `http://localhost:8001/students/${updateStudent.id}`,
-        updateStudent
+        formData
       );
       const student = this.students.find(
         (student) => student.id === updateStudent.id
       );
-      for (const key in student) student[key] = updateStudent[key];
+
+      for (const key in updateStudent) student[key] = updateStudent[key];
+      student.image = URL.createObjectURL(updateStudent.image);
     } catch (error) {
       console.log(error);
     }
